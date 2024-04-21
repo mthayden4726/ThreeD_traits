@@ -32,6 +32,11 @@ unique(trait_mean$trait_trans)
 
 # Just run it myself?
 
+# code to load in file, independent of make.R
+cover_raw <- read.csv("data/Three-D_clean_cover_2019-2022.csv")
+metaTurfID <- create_threed_meta_data()
+sp_list <- read.csv("data/Three-D_clean_taxonomy.csv")
+trait_raw <- read.csv("data/PFTC6_ThreeD_clean_leaf_traits_2022.csv")
 clean_community_data <-  cover_raw |>
   # filter for 2022 and trait data treatments
   filter(year == 2022,
@@ -1765,3 +1770,24 @@ AICc(WN_ldmc_M6,WN_ldmc_M10)
 
 
 
+
+## PCA Stuff - Meghan H. -----
+# First run all function files and load in data
+community <- clean_community(cover_raw, metaTurfID, sp_list)
+traits <- clean_traits(trait_raw)
+wg_trait_impute <- make_trait_impute(community |>
+                                       filter(Namount_kg_ha_y == 0),
+                                     traits |>
+                                       filter(Namount_kg_ha_y == 0))
+wn_trait_impute <- make_trait_impute(community |>
+                                       filter(grazing == "Control"),
+                                     traits |>
+                                       filter(grazing == "Control"))
+g_trait_mean <- make_bootstrapping(wg_trait_impute)
+n_trait_mean <- make_bootstrapping(wn_trait_impute)
+g_trait_pca <- make_trait_pca(g_trait_mean)
+n_trait_pca <- make_trait_pca(n_trait_mean)
+col_palette <- wes_palette("GrandBudapest1")
+make_pca_plot(g_trait_pca, n_trait_pca, col_palette)
+
+# Do PCA another way
