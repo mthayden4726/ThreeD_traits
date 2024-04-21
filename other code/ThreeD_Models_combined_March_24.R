@@ -15,6 +15,21 @@ library(DHARMa)
 library(sjPlot)
 library(MuMIn) # for AICc function
 library(tidyverse)
+library(ggplot2)
+library(targets)
+library(tarchetypes)
+library(dataDownloader)
+library(tidyverse)
+library(performance)
+library(dataDocumentation)
+library(traitstrap)
+library(ggcorrplot)
+library(broom)
+library(vegan)
+library(ggvegan)
+library(glue)
+library(patchwork)
+library(wesanderson)
 
 # Data read in from Aud's scripts...
 
@@ -207,6 +222,7 @@ trait_mean %>%
 # Ok things work
 
 # Variance and skewness are also possible to investigate
+
 
 trait_mean %>%
   mutate(Nitrogen_log = log(Namount_kg_ha_y + 1)) |>
@@ -1787,6 +1803,7 @@ g_trait_mean <- make_bootstrapping(wg_trait_impute)
 n_trait_mean <- make_bootstrapping(wn_trait_impute)
 g_trait_pca <- make_trait_pca(g_trait_mean)
 n_trait_pca <- make_trait_pca(n_trait_mean)
+trait_mean2_pca <- make_trait_pca(trait_mean2)
 col_palette <- wes_palette("GrandBudapest1")
 make_pca_plot(g_trait_pca, n_trait_pca, col_palette)
 
